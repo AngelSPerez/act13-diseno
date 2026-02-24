@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../widgets/theme_toggle.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Recipe {
   final String name;
@@ -53,15 +52,15 @@ class _RecipesScreenState extends State<RecipesScreen> {
   @override
   Widget build(BuildContext context) {
     final recipes = _filtered;
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
-    // Color principal del texto según el tema activo
-    final onSurface = colorScheme.onSurface;
-    final onSurfaceMuted = colorScheme.onSurface.withOpacity(0.55);
+    const primaryColor = Color(0xFF7C6FCD);
+    final textTheme = GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme);
+    const onSurface = Color(0xFF1B1B1F);
+    final onSurfaceMuted = onSurface.withOpacity(0.55);
 
     return Scaffold(
+      backgroundColor: const Color(0xFFFDFCFE),
       appBar: AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: primaryColor,
         title: Text(
           'Todo (8) ▾',
           style: textTheme.titleLarge?.copyWith(
@@ -90,13 +89,11 @@ class _RecipesScreenState extends State<RecipesScreen> {
               ),
             ),
           ),
-          const ThemeToggle(),
         ],
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
-          // ── SEARCH ROW ──────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
@@ -111,7 +108,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
                     child: TextField(
                       controller: _searchController,
                       onChanged: (v) => setState(() => _query = v),
-                      style: TextStyle(fontSize: 14, color: onSurface),
+                      style: const TextStyle(fontSize: 14, color: onSurface),
                       decoration: InputDecoration(
                         hintText: 'Buscar...',
                         hintStyle: TextStyle(
@@ -137,10 +134,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
               ],
             ),
           ),
-
           Divider(height: 1, thickness: 1, color: onSurface.withOpacity(0.2)),
-
-          // ── RECIPE LIST ─────────────────────────────────────────
           Expanded(
             child: recipes.isEmpty
                 ? Center(
@@ -165,7 +159,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
                         ),
                         child: Row(
                           children: [
-                            // Image placeholder box
                             Container(
                               width: 72,
                               height: 72,
@@ -174,7 +167,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
                                   color: onSurface,
                                   width: 1.5,
                                 ),
-                                color: colorScheme.surfaceContainerHighest,
+                                color: const Color(0xFFF4EFF4),
                               ),
                               child: Icon(
                                 r.icon,
@@ -183,8 +176,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
                               ),
                             ),
                             const SizedBox(width: 14),
-
-                            // Name + time
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,8 +197,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
                                 ],
                               ),
                             ),
-
-                            // Heart
                             GestureDetector(
                               onTap: () => setState(() => r.liked = !r.liked),
                               child: Icon(
@@ -228,7 +217,8 @@ class _RecipesScreenState extends State<RecipesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.go('/'),
-        child: const Icon(Icons.logout),
+        backgroundColor: primaryColor,
+        child: const Icon(Icons.logout, color: Colors.white),
       ),
     );
   }
